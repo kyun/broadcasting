@@ -21,7 +21,7 @@ export async function getLocalDevices(): Promise<InputMediaDeviceInfos> {
 export async function getScreenStream() {
   try {
     const stream = await (navigator.mediaDevices as any).getDisplayMedia({audio: false, video: { cursor: 'always' } })
-    console.log(stream);
+    return stream;
     // const video = document.createElement('video');
     // video.srcObject = stream;
     // document.body.append(video);
@@ -61,8 +61,13 @@ export async function getLocalMediaStream(
           audio: {
             deviceId: mediaDevices?.audioinput?.[audioinput].deviceId,
           },
-        };
+      };
     const stream = await navigator.mediaDevices.getUserMedia(constraint);
+    // if (!cameraOn) {
+    //   const videoTrack = stream.getVideoTracks();
+    //   videoTrack.forEach(t => t.enabled = false);
+    // }
+
     return stream;
   } catch (e) {
     //
