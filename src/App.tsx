@@ -79,8 +79,6 @@ const Video = styled.video<{ mirrorMode?: boolean }>`
 `;
 
 const ToolBox = styled.div`
-  // width: 160px;
-  height: 40px;
   background-color: #4b4b4b;
   border-radius: 5px;
 `;
@@ -89,8 +87,8 @@ const ToolButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   background-color: transparent;
   border: none;
   cursor: pointer;
