@@ -16,6 +16,10 @@ import {
 import ToggleIconButton from "./components/ToggleButton";
 import usePrevious from "./hooks/usePrevious";
 import SoundMeter from "./utils/soundMeter";
+import useStudioTools from "./hooks/useStudioTools";
+import useInterval from "./hooks/useInterval";
+import MyVideo from "./components/MyVideo";
+import NoPermission from "./components/NoPermission";
 
 const Main = styled.main`
   display: flex;
@@ -29,7 +33,7 @@ const Main = styled.main`
   box-sizing: border-box;
 `;
 
-const VideoBox = styled.div`
+const VideoBox = styled.div<{ isSpeaking: boolean }>`
   position: relative;
   display: flex;
   max-width: 1280px;
@@ -38,6 +42,9 @@ const VideoBox = styled.div`
   background-color: #4b4b4b;
   border-radius: 5px;
   overflow: hidden;
+  ${({ isSpeaking }) => {
+    return isSpeaking && `border: 2px solid #feca00;`;
+  }}
 `;
 
 const VideoPlaceholder = styled.div<{ showBg?: boolean }>`
@@ -118,15 +125,21 @@ function App() {
     null
   );
   const prevMediaStream = usePrevious<null | MediaStream>(mediaStream);
+  const soundMeterRef = React.useRef<SoundMeter | null>(null);
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-  const [cameraOn, setCameraOn] = React.useState(true);
-  const [muted, setMuted] = React.useState(false);
   const [isVideoLoading, setIsVideoLoading] = React.useState(false);
-  const [mirrorMode, setMirrorMode] = React.useState(false);
+  const [isSpeaking, setIsSpeaking] = React.useState(false);
+  const { cameraOn, muted, mirrorMode, toggleStudioTools } = useStudioTools();
 
+  useInterval(() => {
+    if (soundMeterRef.current) {
+      setIsSpeaking(soundMeterRef.current.slow > 0.02);
+    }
+  }, 1000);
   const handleSoundMeter = (stream: MediaStream) => {
     const soundMeter = new SoundMeter(new AudioContext());
+    soundMeterRef.current = soundMeter;
     soundMeter.connectToSource(stream, (e: any) => {
       console.log(e);
       const canvas = canvasRef.current;
@@ -136,7 +149,7 @@ function App() {
       const draw = () => {
         ctx.clearRect(0, 0, 400, 8);
         ctx.fillStyle = "#feca00";
-        ctx.fillRect(0, 0, soundMeter.slow * 1000, 8);
+        ctx.fillRect(0, 0, soundMeter.slow * 2000, 8);
         window.requestAnimationFrame(draw);
       };
       draw();
@@ -157,17 +170,11 @@ function App() {
       { audioinput: 0, videoinput: 0 },
       cameraOn
     );
-    if (muted) {
-      (stream as MediaStream).getAudioTracks()[0].enabled = muted;
-    }
     handleSoundMeter(stream as MediaStream);
     setMediaStream(stream);
     const video = videoRef.current;
     if (!video || !stream) return;
     video.srcObject = stream;
-    video.volume = 0;
-    video.muted = true;
-    video.play();
   };
 
   const handleScreenStream = async () => {
@@ -177,19 +184,14 @@ function App() {
     video.srcObject = stream;
   };
 
-  const handleCamera = () => {
-    setCameraOn((prev) => !prev);
-  };
-
-  const handleMute = () => {
-    setMuted((prev) => !prev);
+  React.useEffect(() => {
     if (!mediaStream) return;
-    mediaStream.getAudioTracks()[0].enabled = muted;
-  };
+    console.log("muted", muted);
+    if (muted) {
+      mediaStream.getAudioTracks()[0].enabled = muted;
+    }
+  }, [muted, mediaStream]);
 
-  const handleMirrorMode = () => {
-    setMirrorMode((prev) => !prev);
-  };
   React.useEffect(() => {
     setIsVideoLoading(true);
     handleLocalMediaStream();
@@ -203,15 +205,17 @@ function App() {
     <>
       <Header />
       <Main>
-        <VideoBox>
-          <Video
+        {/* <NoPermission /> */}
+        <VideoBox isSpeaking={isSpeaking}>
+          <MyVideo mediaStream={mediaStream} onCanPlay={handleCanPlay} />
+          {/* <Video
             autoPlay
             playsInline
             ref={videoRef}
             onCanPlay={handleCanPlay}
             mirrorMode={mirrorMode}
             muted
-          />
+          /> */}
           {!cameraOn && (
             <VideoPlaceholder>
               <NoCameraMessage>카메라가 꺼져 있음</NoCameraMessage>
@@ -231,19 +235,19 @@ function App() {
         <ToolBox>
           <ToolButton>
             <ToggleIconButton
-              onClick={handleCamera}
-              icons={[<BsCameraVideo />, <BsCameraVideoOff />]}
+              onClick={() => toggleStudioTools("cameraOn")}
+              icons={[<BsCameraVideoOff />, <BsCameraVideo />]}
             />
           </ToolButton>
           <ToolButton>
             <ToggleIconButton
-              onClick={handleMute}
+              onClick={() => toggleStudioTools("muted")}
               icons={[<BsMic />, <BsMicMute />]}
             />
           </ToolButton>
           <ToolButton>
             <ToggleIconButton
-              onClick={handleMirrorMode}
+              onClick={() => toggleStudioTools("mirrorMode")}
               icons={[
                 <BsSymmetryVertical />,
                 <BsSymmetryVertical style={{ transform: "scaleX(-1)" }} />,

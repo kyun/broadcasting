@@ -72,9 +72,22 @@ export async function getLocalMediaStream(
     // }
 
     return stream;
-  } catch (e) {
-    //
-    console.log(e);
+  } catch (e: any) {
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#exceptions
+    switch (e.name) {
+      case "NotAllowedError": {
+        console.log("no permission");
+        break;
+      }
+      case "AbortError":
+      case "NotFoundError":
+      case "NotReadableError":
+      case "OverconstrainedError":
+      case "SecurityError":
+      case "TypeError":
+      default:
+    }
+
     return null;
   }
 }
