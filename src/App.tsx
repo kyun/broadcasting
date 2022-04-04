@@ -20,6 +20,8 @@ import useStudioTools from "./hooks/useStudioTools";
 import useInterval from "./hooks/useInterval";
 import MyVideo from "./components/MyVideo";
 import NoPermission from "./components/NoPermission";
+import { BroadcastManager } from "./core/BroadcastManager";
+import useLocalDevice from "./hooks/useLocalDevice";
 
 const Main = styled.main`
   display: flex;
@@ -131,12 +133,12 @@ function App() {
   const [isVideoLoading, setIsVideoLoading] = React.useState(false);
   const [isSpeaking, setIsSpeaking] = React.useState(false);
   const { cameraOn, muted, mirrorMode, toggleStudioTools } = useStudioTools();
-
-  useInterval(() => {
-    if (soundMeterRef.current) {
-      setIsSpeaking(soundMeterRef.current.slow > 0.02);
-    }
-  }, 1000);
+  useLocalDevice({ cameraOn });
+  // useInterval(() => {
+  //   if (soundMeterRef.current) {
+  //     setIsSpeaking(soundMeterRef.current.slow > 0.02);
+  //   }
+  // }, 1000);
   const handleSoundMeter = (stream: MediaStream) => {
     const soundMeter = new SoundMeter(new AudioContext());
     soundMeterRef.current = soundMeter;
@@ -170,7 +172,7 @@ function App() {
       { audioinput: 0, videoinput: 0 },
       cameraOn
     );
-    handleSoundMeter(stream as MediaStream);
+    // handleSoundMeter(stream as MediaStream);
     setMediaStream(stream);
     const video = videoRef.current;
     if (!video || !stream) return;
@@ -192,10 +194,10 @@ function App() {
     }
   }, [muted, mediaStream]);
 
-  React.useEffect(() => {
-    setIsVideoLoading(true);
-    handleLocalMediaStream();
-  }, [cameraOn]);
+  // React.useEffect(() => {
+  //   setIsVideoLoading(true);
+  //   handleLocalMediaStream();
+  // }, [cameraOn]);
 
   const handleCanPlay = () => {
     setIsVideoLoading(false);
@@ -216,7 +218,7 @@ function App() {
             mirrorMode={mirrorMode}
             muted
           /> */}
-          {!cameraOn && (
+          {/* {!cameraOn && (
             <VideoPlaceholder>
               <NoCameraMessage>카메라가 꺼져 있음</NoCameraMessage>
             </VideoPlaceholder>
@@ -230,7 +232,7 @@ function App() {
             <VideoPlaceholder>
               <MuteMessage>음소거 중입니다.</MuteMessage>
             </VideoPlaceholder>
-          )}
+          )} */}
         </VideoBox>
         <ToolBox>
           <ToolButton>

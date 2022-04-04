@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { BroadcastManager } from "../core/BroadcastManager";
 
 const Video = styled.video`
   width: 100%;
@@ -12,15 +13,19 @@ interface Props {
   onCanPlay?: () => void;
 }
 
-const MyVideo: React.FC<Props> = ({ mediaStream, onCanPlay }) => {
+const MyVideo: React.FC<Props> = ({ onCanPlay }) => {
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
 
   const [isVideoLoading, setIsVideoLoading] = React.useState(false);
-
+  const manager = React.useMemo(() => new BroadcastManager(), []);
+  const { mediaStream } = manager;
   const handleMediaStream = () => {
     console.log("handleMS", mediaStream);
     const video = videoRef.current;
-    if (!video || !mediaStream) return;
+    if (!video || !mediaStream) {
+      console.log("ggg");
+      return;
+    }
     video.srcObject = mediaStream;
   };
 
