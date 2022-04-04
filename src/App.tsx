@@ -254,7 +254,7 @@ function App() {
               ]}
             />
           </ToolButton>
-          <ToolButton>
+          <ToolButton onClick={handleScreenStream}>
             <BsDisplay />
           </ToolButton>
           <ToolButton>
