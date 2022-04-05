@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = styled.span`
+const Base = styled.span`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -13,7 +13,7 @@ interface Props {
   onClick?: () => void;
   icons: Array<React.ReactNode>;
 }
-const ToggleIconButton: React.FC<Props> = ({ onClick, icons }) => {
+const ToggleIcon: React.FC<Props> = ({ onClick, icons }) => {
   const [isActive, setIsActive] = React.useState(false);
 
 
@@ -24,9 +24,9 @@ const ToggleIconButton: React.FC<Props> = ({ onClick, icons }) => {
     handleToggle();
     onClick?.();
   }
-  return <Button onClick={handleClick}>
+  return <Base onClick={handleClick}>
     {isActive ? icons[0] : icons[1]}
-  </Button>;
+  </Base>;
 }
 
-export default ToggleIconButton;
+export default ToggleIcon;

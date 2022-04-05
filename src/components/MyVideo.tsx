@@ -13,12 +13,12 @@ interface Props {
   onCanPlay?: () => void;
 }
 
-const MyVideo: React.FC<Props> = ({ onCanPlay }) => {
+const MyVideo: React.FC<Props> = ({ mediaStream, onCanPlay }) => {
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
 
   const [isVideoLoading, setIsVideoLoading] = React.useState(false);
   const manager = React.useMemo(() => new BroadcastManager(), []);
-  const { mediaStream } = manager;
+  // const { mediaStream } = manager;
   const handleMediaStream = () => {
     console.log("handleMS", mediaStream);
     const video = videoRef.current;

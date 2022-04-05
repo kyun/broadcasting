@@ -13,7 +13,7 @@ import {
   BsGear,
   BsThreeDots,
 } from "react-icons/bs";
-import ToggleIconButton from "./components/ToggleButton";
+import ToggleIconButton from "./components/ToggleIcon";
 import usePrevious from "./hooks/usePrevious";
 import SoundMeter from "./utils/soundMeter";
 import useStudioTools from "./hooks/useStudioTools";
@@ -175,8 +175,11 @@ function App() {
     // handleSoundMeter(stream as MediaStream);
     setMediaStream(stream);
     const video = videoRef.current;
+
     if (!video || !stream) return;
     video.srcObject = stream;
+    video.play();
+    document.body.append(video);
   };
 
   const handleScreenStream = async () => {
@@ -209,7 +212,7 @@ function App() {
       <Main>
         {/* <NoPermission /> */}
         <VideoBox isSpeaking={isSpeaking}>
-          <MyVideo mediaStream={mediaStream} onCanPlay={handleCanPlay} />
+          {/* <MyVideo mediaStream={mediaStream} onCanPlay={handleCanPlay} /> */}
           {/* <Video
             autoPlay
             playsInline

@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import IndexPage from './pages/IndexPage';
+import {
+  RecoilRoot,
+} from 'recoil';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecoilRoot>
+      <IndexPage />
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 );

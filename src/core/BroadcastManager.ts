@@ -17,7 +17,6 @@ export class BroadcastManager {
   }
 
   set mediaStream(mediaStream: MediaStream | null) {
-    this._videoEl.srcObject = mediaStream;
     this._mediaStream = mediaStream;
   }
 
