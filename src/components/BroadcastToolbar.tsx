@@ -11,9 +11,7 @@ import {
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { boradcastState } from "../recoil/broadcastAtom";
-import { getLocalDevices } from "../utils/broadcast";
 import DeviceInfoPopup from "./DeviceInfoPopup";
-import ToggleIcon from "./ToggleIcon";
 
 const ToolbarPlaceholder = styled.div`
   position: relative;

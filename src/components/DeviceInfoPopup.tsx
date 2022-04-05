@@ -34,7 +34,6 @@ const ListItem = styled.li<{ selected?: boolean }>`
   }
 `;
 interface Props {
-  //
   onClick: (l: string, i: number) => void;
   value: any;
 }

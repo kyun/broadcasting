@@ -1,11 +1,8 @@
 import React from "react";
-import { BsCameraVideo, BsGear, BsMic } from "react-icons/bs";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import BroadcastToolbar from "../components/BroadcastToolbar";
-import DeviceInfoPopup from "../components/DeviceInfoPopup";
 import Header from "../components/Header";
-import { BroadcastManager } from "../core/BroadcastManager";
 import useInterval from "../hooks/useInterval";
 import { boradcastState } from "../recoil/broadcastAtom";
 import { getLocalMediaStream, getScreenStream } from "../utils/broadcast";
@@ -54,31 +51,6 @@ const VideoPlaceholder = styled.video<{
     showBg ? "rgba(0,0,0,0.4);" : "transparent"};
 `;
 
-const ToolbarPlaceholder = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  // width: 100%;
-  // max-width: 1280px;
-  height: 56px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 5px;
-`;
-const ToolbarButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  height: 56px;
-  width: 56px;
-  // background-color: #696969;
-  color: white;
-  font-size: 20px;
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-
 const NoCamera = styled.div`
   display: flex;
   align-items: center;
@@ -102,9 +74,7 @@ const NoMic = styled.div`
   color: white;
   font-size: 16px;
 `;
-const Text = styled.p`
-  margin: 0;
-`;
+
 const IndexPage: React.FC<any> = () => {
   const videoRef = React.useRef<any>(null);
   const soundMeterRef = React.useRef<SoundMeter | null>(null);

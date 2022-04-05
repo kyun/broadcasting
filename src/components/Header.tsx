@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const Base = styled.header`
-  //
   position: fixed;
   top: 0;
   left: 0;
@@ -10,8 +9,6 @@ const Base = styled.header`
   width: 100vw;
   padding: 16px 32px;
   display: flex;
-  // justify-content: center;
-  // background-color: #18181b;
   font-family: "Raleway", sans-serif;
   color: #feca00;
 `;
