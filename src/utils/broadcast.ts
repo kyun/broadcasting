@@ -30,7 +30,8 @@ export async function getScreenStream() {
     // document.body.append(video);
   } catch (e) {
     console.log(e);
-    alert(e);
+    return null;
+    // alert(e);
   }
 }
 
